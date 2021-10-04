@@ -19,7 +19,7 @@ namespace Assignment4.Entities
         public string Description { get; set; }
 
         [Required]
-        public string State { get; set; }
+        public State State { get; set; }
 
         public ICollection<Tag> Tags { get; set; }
     }
