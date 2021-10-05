@@ -8,7 +8,7 @@ namespace Assignment4.Entities
     public class Task
     {
         [Required]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [StringLength(100)]
         [Required]

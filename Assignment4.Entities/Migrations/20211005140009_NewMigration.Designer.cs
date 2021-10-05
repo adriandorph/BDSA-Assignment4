@@ -4,14 +4,16 @@ using Assignment4.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Assignment4.Entities.Migrations
 {
     [DbContext(typeof(KanbanContext))]
-    partial class KanbanContextModelSnapshot : ModelSnapshot
+    [Migration("20211005140009_NewMigration")]
+    partial class NewMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,7 +23,7 @@ namespace Assignment4.Entities.Migrations
 
             modelBuilder.Entity("Assignment4.Entities.Tag", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -30,7 +32,7 @@ namespace Assignment4.Entities.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("Id");
+                    b.HasKey("ID");
 
                     b.ToTable("Tags");
                 });
@@ -87,13 +89,13 @@ namespace Assignment4.Entities.Migrations
 
             modelBuilder.Entity("TagTask", b =>
                 {
-                    b.Property<int>("TagsId")
+                    b.Property<int>("TagsID")
                         .HasColumnType("int");
 
                     b.Property<int>("TasksId")
                         .HasColumnType("int");
 
-                    b.HasKey("TagsId", "TasksId");
+                    b.HasKey("TagsID", "TasksId");
 
                     b.HasIndex("TasksId");
 
@@ -113,7 +115,7 @@ namespace Assignment4.Entities.Migrations
                 {
                     b.HasOne("Assignment4.Entities.Tag", null)
                         .WithMany()
-                        .HasForeignKey("TagsId")
+                        .HasForeignKey("TagsID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

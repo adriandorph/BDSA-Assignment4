@@ -18,6 +18,7 @@ namespace Assignment4.Entities
                 .Entity<Task>()
                 .Property(e => e.State)
                 .HasConversion(new EnumToStringConverter<State>());
+
         }
     }
 }
