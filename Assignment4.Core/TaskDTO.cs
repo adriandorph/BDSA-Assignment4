@@ -2,7 +2,8 @@ using System.Collections.Generic;
 
 namespace Assignment4.Core
 {
-    public record TaskDTO
+    public record TaskDTO(int Id, string Title, string Description, int? AssignedToId, IReadOnlyCollection<string> Tags, State State);
+    public record TaskCreateDTO
     {
         public int Id { get; init; }
         public string Title { get; init; }
@@ -11,4 +12,5 @@ namespace Assignment4.Core
         public IReadOnlyCollection<string> Tags { get; init; }
         public State State { get; init; }
     }
+
 }

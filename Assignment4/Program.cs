@@ -14,23 +14,23 @@ namespace Assignment4
     {
         static void Main(string[] args)
         {
-            var kanbanContextFactory = new KanbanContextFactory();
+            //var kanbanContextFactory = new KanbanContextFactory();
 
-            var context = kanbanContextFactory.CreateDbContext(new string[] {});
+            //var context = kanbanContextFactory.CreateDbContext(new string[] {});
 
-            var taskRepository = new TaskRepository(new SqlConnection(kanbanContextFactory.GetConnectionString()));
+            //var taskRepository = new TaskRepository(new SqlConnection(kanbanContextFactory.GetConnectionString()));
 
-            var NewTask = new TaskDTO { Title = "Draw the Table",
+            /*var NewTask = new TaskDTO { Title = "Draw the Table",
                                         AssignedToId = 1,
                                         Description = "A table has to be drawn. Use Millimeter paper",
-                                        State = State.Active };
+                                        State = State.Active };*/
 
-            taskRepository.Create(NewTask);
+            //taskRepository.Create(NewTask);
 
             //taskRepository.FindById(1);
         }
 
-        static IConfiguration LoadConfiguration()
+        /*static IConfiguration LoadConfiguration()
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
@@ -38,6 +38,6 @@ namespace Assignment4
                 .AddUserSecrets<Program>();
 
             return builder.Build();
-        }
+        }*/
     }
 }

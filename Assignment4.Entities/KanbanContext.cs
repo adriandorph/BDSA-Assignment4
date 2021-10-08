@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Assignment4.Entities
 {
-    public class KanbanContext : DbContext
+    public class KanbanContext : DbContext, IKanbanContext
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Task> Tasks { get; set; }
