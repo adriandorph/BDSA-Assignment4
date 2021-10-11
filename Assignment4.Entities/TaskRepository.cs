@@ -2,9 +2,10 @@ using Assignment4.Core;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Data.Common;
+using System.Linq;
 using System;
 using Assignment4.Entities;
+using static Assignment4.Core.Response;
 
 namespace Assignment4.Entities
 {
@@ -17,52 +18,41 @@ namespace Assignment4.Entities
             _context = context;
         }
         
-        public IReadOnlyCollection<TaskDTO> All()
-        {
-            
-
-            return _context.Tasks.SqlQuery("SELECT *", new string[]);
-            //throw new NotImplementedException();
-
-            /*var characters = from c in _context.Characters
-                             where c.Id == characterId
-                             select new CharacterDetailsDTO(
-                                 c.Id,
-                                 c.GivenName,
-                                 c.Surname,
-                                 c.AlterEgo,
-                                 c.City.Name,
-                                 c.FirstAppearance,
-                                 c.Occupation,
-                                 c.Powers.Select(c => c.Name).ToHashSet()
-                             );*/
-            
-        }
-
-        public int Create(TaskDTO task)
+        public (Response Response, int TaskId) Create(TaskCreateDTO task)
         {
             throw new NotImplementedException();
         }
-
-        public void Delete(int taskId)
-        {
-            var taskToRemove = _context.Tasks.Find(taskId);
-            _context.Tasks.Remove(taskToRemove);
-        }
-
-        public TaskDetailsDTO FindById(int TaskId)
+        public IReadOnlyCollection<TaskDTO> ReadAll()
         {
             throw new NotImplementedException();
         }
-
-        private IEnumerable<string> yieldTags(SqlDataReader reader)
+        public IReadOnlyCollection<TaskDTO> ReadAllRemoved()
+        {
+            throw new NotImplementedException();   
+        }
+        public IReadOnlyCollection<TaskDTO> ReadAllByTag(string tag)
         {
             throw new NotImplementedException();
         }
-
-        public void Update(TaskDTO task)
+        public IReadOnlyCollection<TaskDTO> ReadAllByUser(int userId)
         {
-           
+            throw new NotImplementedException();
+        }
+        public IReadOnlyCollection<TaskDTO> ReadAllByState(State state)
+        {
+            throw new NotImplementedException();
+        }
+        public TaskDetailsDTO Read(int taskId)
+        {
+            throw new NotImplementedException();
+        }
+        public Response Update(TaskUpdateDTO task)
+        {
+            throw new NotImplementedException();
+        }
+        public Response Delete(int taskId)
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()
