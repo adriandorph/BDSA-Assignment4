@@ -29,11 +29,12 @@ namespace Assignment4.Entities
                 Title = task.Title,
                 Description = task.Description,
                 AssignedTo = _context.Users.Find(task.AssignedToId),
-                Tags = GetTags(task.Tags),
-                State = State.New,
-                Created = DateTime.UtcNow,
-                StateUpdated = DateTime.UtcNow
+                Tags = GetTags(task.Tags).ToList(),
+                State = State.New
             };
+
+            entity.Created = DateTime.UtcNow;
+            entity.StateUpdated = DateTime.UtcNow;
 
             _context.Tasks.Add(entity);
             _context.SaveChanges();
@@ -125,7 +126,7 @@ namespace Assignment4.Entities
 
             if (_context.Users.Find(task.AssignedToId) == null)
             {
-                return Response.BadRequest;
+                return BadRequest;
             }
             
             if (task.State != entity.State)
@@ -137,12 +138,12 @@ namespace Assignment4.Entities
             entity.State = task.State;
             entity.Title = task.Title;
             entity.Description = task.Description;
-            entity.Tags = GetTags(task.Tags);
+            entity.Tags = GetTags(task.Tags).ToList();
 
             _context.Tasks.Update(entity);
             _context.SaveChanges();
 
-            return Response.Updated;
+            return Updated;
         }
         
         public Response Delete(int taskId)
@@ -153,7 +154,8 @@ namespace Assignment4.Entities
             {
                 return NotFound;
             } 
-            else if (entity.State == Active)
+            
+            if (entity.State == Active)
             {
                 var toBeUpdated = new TaskUpdateDTO
                 {
@@ -162,7 +164,7 @@ namespace Assignment4.Entities
                     Description = entity.Description,
                     AssignedToId = entity.AssignedTo.Id,
                     Tags = GetTagNames(entity.Tags).ToList(),
-                    State = State.Removed
+                    State = Removed
                 };
                 return Update(toBeUpdated);
             }
@@ -175,7 +177,7 @@ namespace Assignment4.Entities
                 _context.Tasks.Remove(entity);
                 _context.SaveChanges();
 
-                return Response.Deleted;
+                return Deleted;
             } 
         }
 
@@ -184,30 +186,18 @@ namespace Assignment4.Entities
             _context.Dispose();
         }
 
-        private static Tag GetTag(string tagName)
-        {
-            var entities = 
-            return entities.FirstOrDefault();
-        }
+        private Tag GetTag(string tagName) =>
+            _context.Tags.FirstOrDefault(t => t.Name == tagName) ??
+                new Tag { Name = tagName };
 
-        private static ICollection<Tag> GetTags(ICollection<string> tags)
+        private IEnumerable<Tag> GetTags(ICollection<string> tags)
         {
-            var ReturnTags = new List<Tag>();
+            var existing = _context.Tags.Where(t => tags.Contains(t.Name)).ToDictionary(t => t.Name);
 
-            for (int i = 0; i < tags.Count; i++)
+            foreach (var tag in tags)
             {
-                var entity = from t in _context.Tags
-                            where t.Name == tags.ElementAt(i)
-                            select new Tag {
-                                Id = t.Id,
-                                Name = t.Name,
-                                Tasks = t.Tasks
-                                };
-                Tag tag = entity.FirstOrDefault();
-                ReturnTags.Add(tag);
+                yield return existing.TryGetValue(tag, out var t) ? t : new Tag { Name = tag };
             }
-            
-            return ReturnTags;
         }
 
         private static IEnumerable<string> GetTagNames(ICollection<Tag> tags)
