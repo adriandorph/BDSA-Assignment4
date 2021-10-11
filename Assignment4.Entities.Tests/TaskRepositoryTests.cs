@@ -11,7 +11,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Assignment4.Entities.Tests
 {
-    public class TaskRepositoryTests: IDisposable
+    public class TaskRepositoryTests : IDisposable
     {
         private readonly TaskRepository _taskRepository;
         private readonly KanbanContext _context;

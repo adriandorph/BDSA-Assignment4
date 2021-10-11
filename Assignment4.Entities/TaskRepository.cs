@@ -21,7 +21,7 @@ namespace Assignment4.Entities
         {
             
 
-            return _context.Tasks.SqlQuery("SELECT *", new string[]);
+            //return _context.Tasks.SqlQuery("SELECT *", new string[]);
             //throw new NotImplementedException();
 
             /*var characters = from c in _context.Characters
@@ -36,7 +36,7 @@ namespace Assignment4.Entities
                                  c.Occupation,
                                  c.Powers.Select(c => c.Name).ToHashSet()
                              );*/
-            
+            throw new NotImplementedException();
         }
 
         public int Create(TaskDTO task)

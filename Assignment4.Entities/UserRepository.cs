@@ -1,6 +1,7 @@
 using Assignment4.Core;
+using static Assignment4.Core.Response;
 using System.Data;
-using System.Data.SqlClient;
+using System.Linq;
 using System;
 using System.Collections.Generic;
 using System.Xml.Schema;
@@ -30,26 +31,59 @@ namespace Assignment4.Entities
 
             return (Response.Created, entity.Id);
         }
-        public IReadOnlyCollection<UserDTO> ReadAll()
-        {
-            throw new NotImplementedException();
-        }
+        public IReadOnlyCollection<UserDTO> ReadAll() =>
+            _context.Users
+                    .Select(u => new UserDTO(u.Id, u.Name, u.Email))
+                    .ToList().AsReadOnly();
         public UserDTO Read(int userId)
         {
-            throw new NotImplementedException();
+            var entities = from u in _context.Users
+                                where u.Id == userId
+                                select new UserDTO(
+                                    u.Id,
+                                    u.Name,
+                                    u.Email
+                                );
+            
+            return entities.FirstOrDefault();
         }
         public Response Update(UserUpdateDTO user)
         {
+            /*var entity = _context.Users.Find(user.Id);
+
+            if (user == null)
+            {
+                return NotFound;
+            }
+
+            entity.Name = user.Name;
+            entity.Email = user.Email;
+            entity.Tasks = GetTasks()*/
             throw new NotImplementedException();
         }
         public Response Delete(int userId, bool force = false)
         {
-            throw new NotImplementedException();
+            var entity = _context.Users.Find(userId);
+
+            if (entity == null)
+            {
+                return NotFound;
+            }
+
+            _context.Users.Remove(entity);
+            _context.SaveChanges();
+
+            return Deleted;
         }
 
         public void Dispose()
         {
             _context.Dispose();
+        }
+
+        private IEnumerable<Task> GetTasks(IEnumerable<string> tasks)
+        {
+            return null;
         }
     }
 }
