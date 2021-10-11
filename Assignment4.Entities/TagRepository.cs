@@ -19,9 +19,9 @@ namespace Assignment4.Entities
 
         public (Response Response, int TagId) Create(TagCreateDTO tag)
         {
-            var entity = new Tag
+            /*var entity = new Tag
             {
-                Id = tag.Id,
+                Id = tag.I,
                 Name = tag.Name
             };
 
@@ -29,7 +29,9 @@ namespace Assignment4.Entities
 
             _context.SaveChanges();
 
-            return (Response.Created, entity.Id);
+            return (Response.Created, entity.Id);*/
+            
+            throw new NotImplementedException();
         }
         public IReadOnlyCollection<TagDTO> ReadAll()
         {

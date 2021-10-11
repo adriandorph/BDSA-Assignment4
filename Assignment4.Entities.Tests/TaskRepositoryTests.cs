@@ -84,7 +84,7 @@ namespace Assignment4.Entities.Tests
         [Fact]
         public void All_returns_four_Tasks()
         {
-            //var expected = new List<Task> {new Task()}
+            /*//var expected = new List<Task> {new Task()}
             Assert.Collection(_taskRepository.All(), 
                 c => Assert.Equal(new TaskDTO(1, "Draw the chair", 
                                 "A chair has to be drawn. Use Millimeter paper", 1,
@@ -114,12 +114,13 @@ namespace Assignment4.Entities.Tests
                 c => Assert.Equal(new CharacterDTO(4, "Selina", "Kyle", "Catwoman"), c)
             );
             */
+            throw new NotImplementedException();
         }
 
         [Fact]
         public void Create_And_Get_Task()
         {
-            var expected = new TaskDetailsDTO { Id = 5,
+            /*var expected = new TaskDetailsDTO { Id = 5,
                                                 Title = "Draw the Table",
                                                 AssignedToId = 1,
                                                 AssignedToName = "Adrian",
@@ -128,18 +129,19 @@ namespace Assignment4.Entities.Tests
                                                 Tags = new List<string> { "Drawing" },
                                                 State = State.Active };
                                                 
-            /*var NewTask = new TaskDTO { Id = 5,
+            var NewTask = new TaskDTO { Id = 5,
                                         Title = "Draw the Table",
                                         AssignedToId = 1,
                                         Description = "A table has to be drawn. Use Millimeter paper",
                                         State = State.Active,
-                                        Tags = new List<string> { "Drawing" } };*/
+                                        Tags = new List<string> { "Drawing" } };
 
             //_taskRepository.Create(NewTask);
 
             var actual = _taskRepository.FindById(1);
 
-            Assert.Equal(expected, actual);
+            Assert.Equal(expected, actual);*/
+            throw new NotImplementedException();
         } 
 
         [Theory]
@@ -148,7 +150,8 @@ namespace Assignment4.Entities.Tests
         [InlineData(4, "Building")]
         public void Find_By_Id(int id, string expectedTitle) 
         {
-            Assert.Equal(expectedTitle, _taskRepository.FindById(id).Title);
+            //Assert.Equal(expectedTitle, _taskRepository.FindById(id).Title);
+            throw new NotImplementedException();
         }
 
         [Theory]
@@ -158,8 +161,9 @@ namespace Assignment4.Entities.Tests
         [InlineData(4)]
         public void Delete(int id) 
         {
-            _taskRepository.Delete(id);
-            Assert.Null(_taskRepository.FindById(id));
+            //_taskRepository.Delete(id);
+            //Assert.Null(_taskRepository.FindById(id));
+            throw new NotImplementedException();
         }
 
         [Fact]
