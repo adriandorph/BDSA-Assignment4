@@ -19,6 +19,11 @@ namespace Assignment4.Entities
 
         public (Response Response, int UserId) Create(UserCreateDTO user)
         {
+            if (ReadByEmail(user.Email) != null)
+            {
+                return (Conflict, 0);
+            }
+
             var entity = new User
             {
                 Name = user.Name,
@@ -26,7 +31,6 @@ namespace Assignment4.Entities
             };
 
             _context.Users.Add(entity);
-
             _context.SaveChanges();
 
             return (Response.Created, entity.Id);
@@ -46,30 +50,51 @@ namespace Assignment4.Entities
                                 );
             return entities.FirstOrDefault();
         }
+
+        public UserDTO ReadByEmail(string email)
+        {
+            var entities = from u in _context.Users
+                                where u.Email == email
+                                select new UserDTO(
+                                    u.Id,
+                                    u.Name,
+                                    u.Email
+                                );
+            return entities.FirstOrDefault();
+        }
+
         public Response Update(UserUpdateDTO user)
         {
-            /*var entity = _context.Users.Find(user.Id);
+            var entity = _context.Users.Find(user.Id);
 
             if (user == null)
             {
                 return NotFound;
             }
 
+            if (ReadByEmail(user.Email) != null)
+            {
+                return Conflict;
+            }
+
+
             entity.Name = user.Name;
             entity.Email = user.Email;
-            entity.Tasks = GetTasks()*/
-            throw new NotImplementedException();
+
+            return Updated;
         }
         public Response Delete(int userId, bool force = false)
         {
-            //needs to check force and only allow deletion if force is true. 
-            //if force is false the response should be Coflict
-            //response should also be conflict if user with same email exists already
             var entity = _context.Users.Find(userId);
 
             if (entity == null)
             {
                 return NotFound;
+            }
+
+            if (entity.Tasks != null && force)
+            {
+                return Conflict;
             }
 
             _context.Users.Remove(entity);
@@ -81,11 +106,6 @@ namespace Assignment4.Entities
         public void Dispose()
         {
             _context.Dispose();
-        }
-
-        private IEnumerable<Task> GetTasks(IEnumerable<string> tasks)
-        {
-            return null;
         }
     }
 }
