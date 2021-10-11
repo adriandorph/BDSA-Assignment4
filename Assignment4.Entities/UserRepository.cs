@@ -44,7 +44,6 @@ namespace Assignment4.Entities
                                     u.Name,
                                     u.Email
                                 );
-            
             return entities.FirstOrDefault();
         }
         public Response Update(UserUpdateDTO user)
@@ -63,6 +62,9 @@ namespace Assignment4.Entities
         }
         public Response Delete(int userId, bool force = false)
         {
+            //needs to check force and only allow deletion if force is true. 
+            //if force is false the response should be Coflict
+            //response should also be conflict if user with same email exists already
             var entity = _context.Users.Find(userId);
 
             if (entity == null)

@@ -21,5 +21,6 @@ namespace Assignment4.Entities
                 .HasConversion(new EnumToStringConverter<State>());
             
         }
+        
     }
 }
