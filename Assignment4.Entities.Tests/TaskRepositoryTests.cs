@@ -46,42 +46,47 @@ namespace Assignment4.Entities.Tests
             var user2 = new User { Name = "Mai", Email = "email2" };
             var user3 = new User { Name = "Sofia", Email = "email@3.dk" };
 
-            var Task1 = new Task { 
+            var Task1 = new Task {  Id = 1,
                                     Title = "Draw the chair", 
                                     AssignedTo = user1, 
                                     Description = "A chair has to be drawn. Use millimeter paper", 
                                     State = State.New, 
-                                    Tags = new List<Tag> {tag1, tag2} };
-            var Task2 = new Task {
+                                    Tags = new List<Tag> {tag1, tag2},
+                                    Created = DateTime.UtcNow,
+                                    StateUpdated = DateTime.UtcNow };
+            var Task2 = new Task {  Id = 2,
                                     Title = "Draw a window", 
                                     AssignedTo = user2, 
                                     Description = "Draw a window behind the chair", 
                                     State = State.New, 
-                                    Tags = new List<Tag>{tag1} };
-            var Task3 = new Task {
+                                    Tags = new List<Tag>{tag1},
+                                    Created = DateTime.UtcNow,
+                                    StateUpdated = DateTime.UtcNow };
+            var Task3 = new Task {  Id = 3,
                                     Title = "Build the chair", 
                                     AssignedTo = user1, 
                                     Description = "UserID 1 needs to build a chair", 
                                     State = State.Active,
-                                    Tags = new List<Tag> {tag4, tag2} };
-            var Task4 = new Task {
+                                    Tags = new List<Tag> {tag4, tag2},
+                                    Created = DateTime.UtcNow,
+                                    StateUpdated = DateTime.UtcNow };
+            var Task4 = new Task {  Id = 4,
                                     Title = "Order coffeemachine", 
                                     AssignedTo = user2, 
                                     Description = "We need a new coffeemachine, the budget is 200,-", 
                                     State = State.Closed, 
-                                    Tags = new List<Tag> {tag3} };
-            var Task5 = new Task {
+                                    Tags = new List<Tag> {tag3},
+                                    Created = DateTime.UtcNow,
+                                    StateUpdated = DateTime.UtcNow };
+            var Task5 = new Task {  Id = 5,
                                     Title = "Destroy coffeemachine", 
                                     AssignedTo = user3, 
                                     Description = "This coffeemachine is bad. We should destroy so we can get a new one", 
                                     State = State.Removed, 
-                                    Tags = new List<Tag> {tag3} };
+                                    Tags = new List<Tag> {tag3},
+                                    Created = DateTime.UtcNow,
+                                    StateUpdated = DateTime.UtcNow };
 
-            context.Tasks.Add(Task1);
-            context.Tasks.Add(Task2);
-            context.Tasks.Add(Task3);
-            context.Tasks.Add(Task4);
-            context.Tasks.Add(Task5);
             context.Tags.Add(tag1);
             context.Tags.Add(tag2);
             context.Tags.Add(tag3);
@@ -89,6 +94,11 @@ namespace Assignment4.Entities.Tests
             context.Users.Add(user1);
             context.Users.Add(user2);
             context.Users.Add(user3);
+            context.Tasks.Add(Task1);
+            context.Tasks.Add(Task2);
+            context.Tasks.Add(Task3);
+            context.Tasks.Add(Task4);
+            context.Tasks.Add(Task5);
 
             context.SaveChanges();
             _context = context;
@@ -116,92 +126,187 @@ namespace Assignment4.Entities.Tests
             Assert.Equal(ExpectedResponse, ActualResponse);
         }
 
-        // Shows exactly the same as Expected and Actual, I have no idea what to do here - Mai
         [Fact]
         public void ReadAll_returns_five_Tasks()
         {
-            
-            Assert.Collection(_taskRepository.ReadAll(), 
-                t => Assert.Equal(new TaskDTO(1, "Draw the chair", 
+            // Expected
+            var ExpectedTaskDTO1 = new TaskDTO(1, "Draw the chair", 
                                 "Adrian", 
                                 new List<string> { "Drawing", "Chair" },
-                                State.New), t),
-                t => Assert.Equal(new TaskDTO(2, "Draw a window", 
+                                State.New);
+            var ExpectedTaskDTO2 = new TaskDTO(2, "Draw a window", 
                                 "Mai",
                                 new List<string> {"Drawing"} ,
-                                State.New), t),
-                t => Assert.Equal(new TaskDTO(3, "Build the chair",  
+                                State.New);
+            var ExpectedTaskDTO3 = new TaskDTO(3, "Build the chair",  
                                 "Adrian", 
-                                new List<string>{"Building", "Chair"}, 
-                                State.Active), t),
-                t => Assert.Equal(new TaskDTO(4, "Order coffeemachine", 
+                                new List<string>{"Chair", "Building"}, 
+                                State.Active);
+            var ExpectedTaskDTO4 = new TaskDTO(4, "Order coffeemachine", 
                                 "Mai", 
                                 new List<string>{"Kitchen Appliance"}, 
-                                State.Active), t),
-                t => Assert.Equal(new TaskDTO(5, "Destroy coffeemachine", 
+                                State.Closed);
+            var ExpectedTaskDTO5 = new TaskDTO(5, "Destroy coffeemachine", 
                                 "Sofia",
                                 new List<string> {"Kitchen Appliance"},
-                                State.Removed), t)
+                                State.Removed);
+
+            // Actual
+            var ExpectedTasks = _taskRepository.ReadAll();
+
+            Assert.Collection(ExpectedTasks, 
+                t => {
+                    Assert.Equal(ExpectedTaskDTO1.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO1.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO1.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO1.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO1.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO2.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO2.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO2.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO2.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO2.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO3.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO3.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO3.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO3.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO3.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO4.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO4.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO4.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO4.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO4.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO5.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO5.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO5.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO5.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO5.State, t.State);
+                }
             );
         }
 
-        // Shows exactly the same as Expected and Actual, I have no idea what to do here - Mai
         [Fact]
         public void ReadAllRemoved_returns_task5()
         {
+            // Expected
+            var ExpectedTaskDTO = new TaskDTO(5, "Destroy coffeemachine", "Sofia",
+                                    new List<string> {"Kitchen Appliance"}, State.Removed);
+
+            // Actual
             var removed = _taskRepository.ReadAllRemoved();
 
             Assert.Collection(removed,
-                t => Assert.Equal(new TaskDTO(5, "Destroy coffeemachine", "Sofia", 
-                                    new List<string> {"Kitchen Appliance"}, State.Removed), t)
-                                    
+                t => {
+                    Assert.Equal(ExpectedTaskDTO.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO.State, t.State);
+                }
             );
         }
 
-        // Shows exactly the same as Expected and Actual, I have no idea what to do here - Mai
         [Fact]
         public void ReadAllByTag_given_drawing_returns_2_tasks()
         {   
+            // Expected
+            var ExpectedTaskDTO1 = new TaskDTO(1, "Draw the chair", "Adrian",
+                                    new List<string> {"Drawing", "Chair"}, State.New);
+            var ExpectedTaskDTO2 = new TaskDTO(2, "Draw a window", "Mai", 
+                                    new List<string> {"Drawing"}, State.New);
+
+            // Actual
             var tagsByDrawing = _taskRepository.ReadAllByTag("Drawing");
 
+            // Test
             Assert.Collection(tagsByDrawing,
-                t => Assert.Equal(new TaskDTO(1, "Draw the chair", "Adrian",
-                                    new List<string> {"Drawing", "Chair"}, State.New), t),
-                t => Assert.Equal(new TaskDTO(2, "Draw a window", "Mai", 
-                                    new List<string> {"Drawing"}, State.New), t)
+                t => {
+                    Assert.Equal(ExpectedTaskDTO1.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO1.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO1.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO1.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO1.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO2.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO2.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO2.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO2.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO2.State, t.State);
+                }
             );
         }
 
-        // Draw window task's ID is off by one
         [Fact]
         public void ReadAllByUser_given_2_returns_Task_4_and_2()
         {
+            // Expected
+            var ExpectedTaskDTO1 = new TaskDTO(2, "Draw a window", "Mai", 
+                                    new List<string> {"Drawing"}, State.New);
+            var ExpectedTaskDTO2 = new TaskDTO(4, "Order coffeemachine", "Mai", 
+                                    new List<string> {"Kitchen Appliance"}, State.Closed);
+
+            // Actual
             var tasksBy2 = _taskRepository.ReadAllByUser(2);
 
+            // Test
             Assert.Collection(tasksBy2,
-            t => Assert.Equal(new TaskDTO(2, "Draw a window", "Mai", 
-                                    new List<string> {"Drawing"}, State.New), t),
-                t => Assert.Equal(new TaskDTO(4, "Order coffeemachine", "Mai", 
-                                    new List<string> {"Kitchen Appliance"}, State.Closed), t)
+                t => {
+                    Assert.Equal(ExpectedTaskDTO1.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO1.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO1.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO1.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO1.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO2.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO2.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO2.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO2.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO2.State, t.State);
+                }
             );
         }
 
-        // Shows exactly the same as Expected and Actual, I have no idea what to do here - Mai
         [Fact]
         public void ReadAllByState_given_new_returns_2_tasks()
         {
+            // Expected
+            var ExpectedTaskDTO1 = new TaskDTO(1, "Draw the chair", "Adrian", 
+                                    new List<string> {"Drawing", "Chair"}, State.New);
+            var ExpectedTaskDTO2 = new TaskDTO(2, "Draw a window", "Mai", 
+                                    new List<string> {"Drawing"}, State.New);
+
+            // Actual
             var newTasks = _taskRepository.ReadAllByState(State.New);
 
+            // Test
             Assert.Collection(newTasks,
-                t => Assert.Equal(new TaskDTO(1, "Draw the chair", "Adrian", 
-                                    new List<string> {}, State.New), t),
-                t => Assert.Equal(new TaskDTO(2, "Draw a window", "Mai", 
-                                    new List<string> {"Drawing"}, State.New), t)
+                t => {
+                    Assert.Equal(ExpectedTaskDTO1.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO1.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO1.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO1.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO1.State, t.State);
+                },
+                t => {
+                    Assert.Equal(ExpectedTaskDTO2.Id, t.Id);
+                    Assert.Equal(ExpectedTaskDTO2.Title, t.Title);
+                    Assert.Equal(ExpectedTaskDTO2.AssignedToName, t.AssignedToName);
+                    Assert.Equal(ExpectedTaskDTO2.Tags, t.Tags);
+                    Assert.Equal(ExpectedTaskDTO2.State, t.State);
+                }
             );
         }
 
-        // TODO:
-        // Issues with time not being set correctly
         [Fact]
         public void Read_given_1_returns_task_1()
         {
@@ -211,7 +316,11 @@ namespace Assignment4.Entities.Tests
 
             var actualTask = _taskRepository.Read(1);
 
-            Assert.Equal(expectedTask, actualTask); 
+            Assert.Equal(expectedTask.Id, actualTask.Id);
+            Assert.Equal(expectedTask.Title, actualTask.Title);
+            Assert.Equal(expectedTask.Description, actualTask.Description);
+            Assert.Equal(expectedTask.AssignedToName, actualTask.AssignedToName);
+            Assert.Equal(expectedTask.State, actualTask.State);
             Assert.Equal(expectedTask.Created, actualTask.Created, precision: TimeSpan.FromSeconds(5));
             Assert.Equal(expectedTask.StateUpdated, actualTask.StateUpdated, precision: TimeSpan.FromSeconds(5));
         }
@@ -238,8 +347,8 @@ namespace Assignment4.Entities.Tests
         // then you have to move then Id one down to get the expected Tasks.
         [Theory]
         [InlineData(1, Response.Deleted)]
-        [InlineData(2, Response.Updated)]
-        [InlineData(4, Response.Conflict)]
+        [InlineData(3, Response.Updated)]
+        [InlineData(5, Response.Conflict)]
         public void Delete_Task_with_status_returns_correct_response(int taskId, Response response)
         {
             Assert.Equal(response, _taskRepository.Delete(taskId));

@@ -45,12 +45,17 @@ namespace Assignment4.Entities
         public IReadOnlyCollection<TaskDTO> ReadAll() =>
             _context.Tasks
                     .Select(t => 
-                    new TaskDTO(t.Id,
-                                t.Title,
-                                t.AssignedTo.Name,
-                                GetTagNames(t.Tags).ToList(),
-                                t.State))
-                    .ToList().AsReadOnly();
+                    new TaskDetailsDTO(
+                                    t.Id,
+                                    t.Title,
+                                    t.Description,
+                                    t.Created,
+                                    t.AssignedTo.Name,
+                                    GetTagNames(t.Tags).ToList(),
+                                    t.State,
+                                    t.StateUpdated
+                                )
+                    ).ToList().AsReadOnly();
                     
         public IReadOnlyCollection<TaskDTO> ReadAllRemoved()
         {
@@ -61,12 +66,15 @@ namespace Assignment4.Entities
         {
             var entities = from t in _context.Tasks
                                 where t.Tags.Contains(GetTag(tag))
-                                select new TaskDTO(
+                                select new TaskDetailsDTO(
                                     t.Id,
                                     t.Title,
+                                    t.Description,
+                                    t.Created,
                                     t.AssignedTo.Name,
                                     GetTagNames(t.Tags).ToList(),
-                                    t.State
+                                    t.State,
+                                    t.StateUpdated
                                 );
                                 
             return entities.ToList().AsReadOnly();
@@ -75,12 +83,15 @@ namespace Assignment4.Entities
         {
             var entities = from t in _context.Tasks
                                 where t.AssignedTo.Id == userId
-                                select new TaskDTO(
+                                select new TaskDetailsDTO(
                                     t.Id,
                                     t.Title,
+                                    t.Description,
+                                    t.Created,
                                     t.AssignedTo.Name,
                                     GetTagNames(t.Tags).ToList(),
-                                    t.State
+                                    t.State,
+                                    t.StateUpdated
                                 );
             return entities.ToList().AsReadOnly();
         }
@@ -88,12 +99,15 @@ namespace Assignment4.Entities
         {
             var entities = from t in _context.Tasks
                                 where t.State == state
-                                select new TaskDTO(
+                                select new TaskDetailsDTO(
                                     t.Id,
                                     t.Title,
+                                    t.Description,
+                                    t.Created,
                                     t.AssignedTo.Name,
                                     GetTagNames(t.Tags).ToList(),
-                                    t.State
+                                    t.State,
+                                    t.StateUpdated
                                 );
             return entities.ToList().AsReadOnly();
 
