@@ -78,6 +78,25 @@ namespace Assignment4.Entities.Tests
         }
 
         [Fact]
+        public void Update_User_Name_And_Email()
+        {
+            // Arrange
+            _context.Users.Add(new User { Name = "Mai", Email = "mai@mail.com"} );
+            _context.SaveChanges();
+
+            // Expected
+            var ExpectedResponse = Updated;
+
+            // Actual
+            var UserUpdateInfo = new UserUpdateDTO { Id = 1, Name = "Mai Blom", Email = "mai@mail.com" };
+            var ActualResponse = _repo.Update(UserUpdateInfo);
+
+            // Test
+            Assert.Equal(ExpectedResponse, ActualResponse);
+            Assert.Equal("Mai Blom", _repo.Read(1).Name);
+        }
+
+        [Fact]
         public void ReadAll_success()
         {
             // Arrange

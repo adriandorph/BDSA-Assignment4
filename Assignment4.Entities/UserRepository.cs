@@ -72,7 +72,8 @@ namespace Assignment4.Entities
                 return NotFound;
             }
 
-            if (ReadByEmail(user.Email) != null)
+
+            if (ReadByEmail(user.Email).Id != user.Id)
             {
                 return Conflict;
             }
@@ -80,6 +81,9 @@ namespace Assignment4.Entities
 
             entity.Name = user.Name;
             entity.Email = user.Email;
+
+            _context.Users.Update(entity);
+            _context.SaveChanges();
 
             return Updated;
         }
